@@ -1,0 +1,4 @@
+interface:
+  display_name: "Frontend Design"
+  short_description: "Interactive UI preview and design handoff"
+  default_prompt: "Use $frontend-design to create an interactive UI preview with inline comments and exportable design feedback."
