@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { requestScrollRefresh } from '../animation/gsap'
 import type { StoryImage as StoryImageData } from '../data/siteContent'
 
 type StoryImageProps = StoryImageData & {
@@ -21,7 +22,11 @@ export function StoryImage({ src, alt, label, className = '', eager = false }: S
           alt={alt}
           loading={eager ? 'eager' : 'lazy'}
           decoding="async"
-          onError={() => setFailed(true)}
+          onLoad={requestScrollRefresh}
+          onError={() => {
+            setFailed(true)
+            requestScrollRefresh()
+          }}
         />
       )}
     </figure>

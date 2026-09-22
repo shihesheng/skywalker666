@@ -5,7 +5,7 @@ import { meaningChapters, meaningIntro, type MeaningChapter } from '../data/site
 function MeaningContent({ chapter, fallback = false }: { chapter: MeaningChapter; fallback?: boolean }) {
   return (
     <article
-      className={fallback ? 'meaning__fallback-chapter' : 'meaning__chapter'}
+      className={fallback ? 'meaning__fallback-chapter' : `meaning__chapter meaning__chapter--${chapter.id}`}
       data-motion={!fallback ? true : undefined}
     >
       <div className="meaning__chapter-heading">
@@ -23,6 +23,20 @@ function MeaningContent({ chapter, fallback = false }: { chapter: MeaningChapter
         </div>
       )}
     </article>
+  )
+}
+
+function MeaningVisual({ chapter }: { chapter: MeaningChapter }) {
+  return (
+    <div className={`meaning__visual-layer meaning__visual-layer--${chapter.id}`} data-motion aria-hidden="true">
+      <span className="meaning__visual-word">{chapter.englishTitle}</span>
+      <span className="meaning__visual-node meaning__visual-node--a">01</span>
+      <span className="meaning__visual-node meaning__visual-node--b">02</span>
+      <span className="meaning__visual-node meaning__visual-node--c">03</span>
+      <i className="meaning__visual-link meaning__visual-link--a" />
+      <i className="meaning__visual-link meaning__visual-link--b" />
+      <i className="meaning__visual-ring" />
+    </div>
   )
 }
 
@@ -46,6 +60,9 @@ export function MeaningSection() {
             {meaningChapters.map((chapter) => (
               <span className="meaning__ghost" data-motion key={chapter.id}>{chapter.title}</span>
             ))}
+          </div>
+          <div className="meaning__visual">
+            {meaningChapters.map((chapter) => <MeaningVisual chapter={chapter} key={chapter.id} />)}
           </div>
           <div className="meaning__counter" aria-hidden="true">
             {meaningChapters.map((chapter) => <span key={chapter.id}>{chapter.id}</span>)}
