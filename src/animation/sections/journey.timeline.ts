@@ -1,119 +1,97 @@
-import { MOTION } from '../config'
-import { gsap } from '../gsap'
+import { gsap, ScrollTrigger } from '../gsap'
 import type { SectionAnimation } from '../types'
 import { performanceCallbacks, selectAll } from '../utils'
+import { journeyEmissionConfigs, sampleEmission, SPAWN_END, APPROACH_END } from './journeyEmission'
+import type { EmissionConfig } from './journeyEmission'
 
-const incomingMedia = [
-  { xPercent: 18, yPercent: 0, scale: 1.08, clipPath: 'inset(0 0 0 28%)' },
-  { xPercent: -16, yPercent: 8, scale: 0.94, clipPath: 'inset(18% 0 0 0)' },
-  { xPercent: 0, yPercent: 15, scale: 1.06, clipPath: 'inset(0 24% 0 0)' },
-  { xPercent: 20, yPercent: -6, scale: 0.92, clipPath: 'inset(0 0 22% 0)' },
-  { xPercent: -12, yPercent: 0, scale: 1.1, clipPath: 'inset(0 18% 0 0)' },
-] as const
+function createCardEmissionAnimation(card: HTMLElement, config: EmissionConfig, stage: HTMLElement) {
+  const clock = { life: 0 }
+  let geometry = { width: 0, height: 0, cardWidth: 0, cardHeight: 0 }
+  let origin = { x: 0, y: 0 }
+
+  // Read layout only on setup/refresh, never inside the animation render loop.
+  const measure = () => {
+    geometry = {
+      width: stage.clientWidth,
+      height: stage.clientHeight,
+      cardWidth: card.offsetWidth,
+      cardHeight: card.offsetHeight,
+    }
+    origin = {
+      x: geometry.width / 2 - card.offsetLeft - geometry.cardWidth / 2,
+      y: geometry.height / 2 - card.offsetTop - geometry.cardHeight / 2,
+    }
+  }
+  const render = () => {
+    const frame = sampleEmission(clock.life, config, geometry)
+    card.style.transform = `translate3d(${origin.x + frame.x}px, ${origin.y + frame.y}px, 0) scale(${frame.scale})`
+  }
+
+  measure()
+  render()
+  const timeline = gsap.timeline({ onUpdate: render, defaults: { ease: 'none' } })
+  timeline
+    .to(clock, { life: SPAWN_END, duration: config.duration * SPAWN_END })
+    .to(clock, { life: APPROACH_END, duration: config.duration * (APPROACH_END - SPAWN_END) })
+    .to(clock, { life: 1, duration: config.duration * (1 - APPROACH_END) })
+
+  return { timeline, measure, render }
+}
 
 export const createJourneyTimeline: SectionAnimation = (scope, conditions) => {
   if (!conditions.desktop) return
 
-  const film = scope.querySelector<HTMLElement>('.journey-film')
-  const stage = scope.querySelector<HTMLElement>('.journey-film__stage')
-  const scenes = selectAll<HTMLElement>(scope, '.experience-scene')
-  const markers = selectAll<HTMLElement>(scope, '.journey-film__navigation li')
-  const progress = scope.querySelector<HTMLElement>('.journey-film__track i')
-  const bridge = scope.querySelector<HTMLElement>('.journey-film__bridge')
+  const stage = scope.querySelector<HTMLElement>('.journey-universe__sticky')
+  const center = scope.querySelector<HTMLElement>('.journey-universe__center')
+  const cards = selectAll<HTMLElement>(scope, '[data-journey-card]')
+  const orbits = selectAll<HTMLElement>(scope, '.journey-universe__orbit')
+  const scrollLine = scope.querySelector<HTMLElement>('.journey-universe__scroll-note i')
+  if (!stage || !center || cards.length === 0) return
+  const originalTransforms = cards.map(card => card.style.transform)
 
-  if (!film || !stage || scenes.length === 0) return
+  // Context-owned writes restore sizing on unmount/media changes. The direct
+  // projected transforms are restored explicitly after child onUpdate callbacks.
+  gsap.set(cards, {
+    scale: 0,
+    opacity: 1,
+    z: 0,
+    transformOrigin: '50% 50%',
+    width: '80vw',
+    height: '60vw',
+    zIndex: (i: number) => cards.length - i,
+  })
+  gsap.set(center, { xPercent: -50, yPercent: -50, x: 0, y: 0, scale: 1 })
+  gsap.set(orbits, { scale: 0.92, opacity: 0.65, transformOrigin: 'center center' })
+  gsap.set(scrollLine, { scaleY: 0, transformOrigin: 'top center' })
 
-  const copies = scenes.map((scene) => scene.querySelector<HTMLElement>('.experience-scene__copy'))
-  const media = scenes.map((scene) => scene.querySelector<HTMLElement>('.experience-scene__media'))
-  const numbers = scenes.map((scene) => scene.querySelector<HTMLElement>('.experience-scene__number'))
-  const animatedTargets = [...copies, ...media, ...numbers, bridge].filter(Boolean)
-
-  gsap.set(scenes, { autoAlpha: 0, zIndex: 0 })
-  gsap.set(scenes[0], { autoAlpha: 1, zIndex: 2 })
-  gsap.set(copies[0], { autoAlpha: 1, xPercent: 0, yPercent: 0, clipPath: 'inset(0 0 0% 0)' })
-  gsap.set(media[0], { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 1, clipPath: 'inset(0 0 0% 0)' })
-  gsap.set(numbers[0], { autoAlpha: 1, xPercent: 0 })
-  gsap.set(markers, { opacity: 0.28, x: 0 })
-  gsap.set(markers[0], { opacity: 1, x: 8 })
-  gsap.set(progress, { scaleY: 0, transformOrigin: 'top center' })
-  gsap.set(bridge, { autoAlpha: 0, xPercent: -12 })
-
-  const timeline = gsap.timeline({
-    defaults: { ease: MOTION.ease.cinematic },
+  const emissions = cards.map((card, index) => createCardEmissionAnimation(card, journeyEmissionConfigs[index], stage))
+  const refreshGeometry = () => emissions.forEach(({ measure, render }) => { measure(); render() })
+  const master = gsap.timeline({
     scrollTrigger: {
-      trigger: film,
+      id: 'journey-emission',
+      trigger: scope,
+      // The existing 100svh CSS sticky stage holds the viewport; no double pin.
       start: 'top top',
-      end: () => `+=${window.innerHeight * 5.8}`,
-      scrub: 0.58,
-      pin: stage,
-      pinSpacing: true,
-      anticipatePin: 1,
+      end: 'bottom bottom',
+      scrub: 0.65,
       invalidateOnRefresh: true,
-      fastScrollEnd: true,
-      ...performanceCallbacks(animatedTargets),
+      ...performanceCallbacks([center, ...cards, ...orbits].filter(Boolean), 'transform'),
     },
   })
 
-  timeline.to(progress, { scaleY: 0.08, duration: 0.35, ease: 'none' }, 0)
+  emissions.forEach(({ timeline }, index) => master.add(timeline, journeyEmissionConfigs[index].start))
+  master
+    .to(center, { scale: 0.96, y: -8, duration: 0.5, ease: 'sine.inOut' }, 0)
+    .to(center, { scale: 1, y: 0, duration: 0.5, ease: 'sine.inOut' }, 0.5)
+    .to(orbits, { scale: 1.06, rotation: 12, duration: 1, ease: 'none' }, 0)
+    .to(scrollLine, { scaleY: 1, duration: 1, ease: 'none' }, 0)
 
-  scenes.slice(1).forEach((scene, index) => {
-    const previousIndex = index
-    const currentIndex = index + 1
-    const position = currentIndex
-    const direction = currentIndex % 2 === 0 ? -1 : 1
-    const incoming = incomingMedia[index]
-
-    timeline
-      .set(scene, { autoAlpha: 1, zIndex: 3 }, position)
-      .to(copies[previousIndex], {
-        autoAlpha: 0,
-        xPercent: -10 * direction,
-        duration: 0.38,
-      }, position)
-      .to(media[previousIndex], {
-        autoAlpha: 0.13,
-        xPercent: -5 * direction,
-        yPercent: -4,
-        scale: 0.88,
-        duration: 0.66,
-      }, position)
-      .to(numbers[previousIndex], { autoAlpha: 0, xPercent: -18 * direction, duration: 0.32 }, position)
-      .fromTo(
-        media[currentIndex],
-        { ...incoming, autoAlpha: 0 },
-        {
-          xPercent: 0,
-          yPercent: 0,
-          scale: 1,
-          clipPath: 'inset(0 0 0% 0)',
-          autoAlpha: 1,
-          duration: 0.72,
-        },
-        position + 0.02,
-      )
-      .fromTo(
-        copies[currentIndex],
-        { autoAlpha: 0, xPercent: 12 * direction, clipPath: direction > 0 ? 'inset(0 0 0 100%)' : 'inset(0 100% 0 0)' },
-        { autoAlpha: 1, xPercent: 0, clipPath: 'inset(0 0% 0 0)', duration: 0.64 },
-        position + 0.16,
-      )
-      .fromTo(
-        numbers[currentIndex],
-        { autoAlpha: 0, xPercent: 18 * direction },
-        { autoAlpha: 1, xPercent: 0, duration: 0.55 },
-        position + 0.12,
-      )
-      .to(markers[previousIndex], { opacity: 0.28, x: 0, duration: 0.24 }, position)
-      .to(markers[currentIndex], { opacity: 1, x: 8, duration: 0.34 }, position + 0.1)
-      .to(progress, { scaleY: currentIndex / (scenes.length - 1), duration: 0.7, ease: 'none' }, position)
-      .set(scenes[previousIndex], { autoAlpha: 0, zIndex: 0 }, position + 0.72)
-      .set(scene, { zIndex: 2 }, position + 0.73)
-  })
-
-  const finalPosition = scenes.length
-  timeline
-    .to(progress, { scaleY: 1, duration: 0.45, ease: 'none' }, finalPosition - 0.22)
-    .fromTo(bridge, { autoAlpha: 0, xPercent: -12 }, { autoAlpha: 1, xPercent: 0, duration: 0.62 }, finalPosition - 0.18)
-    .to(media[media.length - 1], { scale: 0.94, xPercent: -4, duration: 0.75 }, finalPosition - 0.18)
-    .to(copies[copies.length - 1], { xPercent: 4, duration: 0.75 }, finalPosition - 0.18)
+  ScrollTrigger.addEventListener('refresh', refreshGeometry)
+  return () => {
+    ScrollTrigger.removeEventListener('refresh', refreshGeometry)
+    cards.forEach((card, index) => {
+      if (originalTransforms[index]) card.style.transform = originalTransforms[index]
+      else card.style.removeProperty('transform')
+    })
+  }
 }

@@ -34,30 +34,36 @@ export type PlanChapter = {
 
 export const siteMeta = {
   name: '[NAME]',
-  role: '外联部副部竞选',
+  role: 'External Relations',
   englishRole: 'External Relations · Deputy Head Candidate',
 }
 
 export const heroContent = {
-  eyebrow: '01 / WHO I AM',
-  kicker: 'A personal story, told through the moments that shaped it.',
-  image: {
-    src: '/images/profile-main.jpg',
-    alt: '个人主照片',
-    label: 'PROFILE / MAIN',
-  },
+  eyebrow: 'UNSWCSA / 2026',
+  campus: 'UNSW · KENSINGTON',
+  candidacy: 'Deputy Head Candidate',
+  signature: 'Eddy 盛世禾',
 }
 
 export const aboutContent = {
-  eyebrow: '01 / WHO I AM',
-  title: '先从我开始',
+  eyebrow: '01 / PERSONAL INTRODUCTION',
+  title: '个人简介',
   englishTitle: 'A little about me.',
-  body: '[在这里写一段关于自己的话。可以是性格、加入社团的原因，或者希望大家先记住的一件小事。]',
-  note: 'keep it honest',
-  images: [
-    { src: '/images/profile-01.jpg', alt: '个人生活照片一', label: 'PROFILE / 01' },
-    { src: '/images/profile-02.jpg', alt: '个人生活照片二', label: 'PROFILE / 02' },
-  ] satisfies StoryImage[],
+  body: [
+    '我是一名软件工程专业的大二学生。专业上，我比较喜欢“边做边学”。除了课程学习之外，也会主动参加一些项目和比赛，比如字节全栈挑战赛、安克创新黑客松。',
+    '对我来说，参加这些活动不只是为了多一段经历，更重要的是能真正和团队一起做东西、解决问题，把脑子里的想法一点点落地。',
+    '平时我很喜欢运动，尤其是打羽毛球；也喜欢音乐，会弹一点钢琴、吹口琴。相比一直待在自己的舒适区里，我更喜欢尝试新东西、认识不同的人，也很享受和大家一起讨论、合作的过程。',
+  ],
+  labels: [
+    'Software Engineering',
+    'learning by doing',
+    'ByteDance Full-Stack Challenge',
+    'Anker Hackathon',
+    'Badminton',
+    'Piano',
+    'Harmonica',
+  ],
+  note: 'curious by default',
 }
 
 export const journeyIntro = {
@@ -130,7 +136,6 @@ export const experiences: Experience[] = [
       'Welcome Party 是我很喜欢的一类活动，因为它让我看到社团最有生命力的一面。',
       '大家从陌生到熟悉，也让我越来越确定：一个好的活动，不只是把流程完成，而是真的创造一个让人愿意留下来的环境。',
     ],
-    annotation: 'people make the event.',
     images: [
       { src: '/images/welcome-party-01.jpg', alt: 'Welcome Party 活动主照片', label: 'WELCOME / 01' },
       { src: '/images/welcome-party-02.jpg', alt: 'Welcome Party 活动照片二', label: 'WELCOME / 02' },
@@ -146,7 +151,6 @@ export const experiences: Experience[] = [
       '如果说前面的活动更多让我认识了社团内部的连接，那么宣讲活动让我进一步接触到外联更核心的一面——社团和外部资源之间的连接。',
       '如何沟通、如何理解双方需求、如何让一次合作真正对彼此有价值，是我觉得外联最值得学习的地方。',
     ],
-    annotation: 'And that changed how I see External Relations.',
     images: [
       { src: '/images/zijin-talk-01.jpg', alt: '紫金宣讲活动照片', label: 'ZIJIN TALK / 01' },
     ],

@@ -54,7 +54,22 @@ export function FutureSection() {
       </header>
 
       <div className="future__plans">
-        {plans.map((plan) => <Plan plan={plan} key={plan.id} />)}
+        <div className="future__plans-sticky">
+          <div className="future__deck-heading" aria-hidden="true">
+            <span>{futureIntro.eyebrow}</span>
+            <p>{futureIntro.title}</p>
+          </div>
+          <div className="future__deck">
+            {plans.map((plan) => <Plan plan={plan} key={plan.id} />)}
+            <div className="future__tabs" aria-hidden="true">
+              {plans.map((plan) => <span className="future__tab" key={plan.id}>/{plan.id}</span>)}
+            </div>
+          </div>
+          <div className="future__deck-footer" aria-hidden="true">
+            <span>01 — 04</span>
+            <span>SCROLL ↓</span>
+          </div>
+        </div>
       </div>
     </section>
   )
