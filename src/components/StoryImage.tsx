@@ -12,11 +12,12 @@ export function StoryImage({ src, alt, label, className = '', eager = false }: S
 
   return (
     <figure className={`story-image ${failed ? 'is-placeholder' : ''} ${className}`}>
-      <div className="story-image__fallback" aria-hidden={!failed}>
-        <span>{label}</span>
-        <small>{src}</small>
-      </div>
-      {!failed && (
+      {failed ? (
+        <div className="story-image__fallback">
+          <span>{label}</span>
+          <small>{src}</small>
+        </div>
+      ) : (
         <img
           src={src}
           alt={alt}
