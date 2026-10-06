@@ -1,34 +1,29 @@
 import { createAboutTimeline } from '../animation/sections/about.timeline'
 import { useSectionTimeline } from '../animation/useSectionTimeline'
-import { aboutContent, type StoryImage as StoryImageData } from '../data/siteContent'
-import { StoryImage } from './StoryImage'
+import { aboutContent } from '../data/siteContent'
 
 const profileScenes: Array<{
   number: string
   lead: string
   accent: string
-  image: StoryImageData
   labels: string[]
 }> = [
   {
     number: '01',
     lead: '边做',
     accent: '边学.',
-    image: { src: '/images/profile-story-01.jpg', alt: '个人经历照片一', label: 'PROFILE / 01' },
     labels: aboutContent.labels.slice(0, 3),
   },
   {
     number: '02',
     lead: '把想法',
     accent: '做出来.',
-    image: { src: '/images/profile-story-02.jpg', alt: '个人经历照片二', label: 'PROFILE / 02' },
     labels: aboutContent.labels.slice(2, 4),
   },
   {
     number: '03',
     lead: '走出',
     accent: '舒适区.',
-    image: { src: '/images/profile-story-03.jpg', alt: '个人经历照片三', label: 'PROFILE / 03' },
     labels: aboutContent.labels.slice(4),
   },
 ]
@@ -50,6 +45,11 @@ export function AboutSection() {
           <span>01—03</span>
         </div>
 
+        <div className="about-cinema__backdrop" aria-hidden="true">
+          <span>ABOUT</span>
+          <span>PROFILE</span>
+        </div>
+
         <header className="about-cinema__opening" data-about-opening>
           <span className="about-cinema__signal" aria-hidden="true" />
           <p className="section-kicker">{aboutContent.eyebrow}</p>
@@ -61,11 +61,13 @@ export function AboutSection() {
           <p className="about-cinema__opening-note">{aboutContent.englishTitle}</p>
         </header>
 
-        <div className="about-cinema__scenes">
+        <div className="about-cinema__deck">
           {profileScenes.map((scene, index) => (
             <article
-              className={`about-cinema__scene ${index % 2 === 1 ? 'about-cinema__scene--reverse' : ''}`}
-              data-about-scene
+              className={`about-cinema__page about-cinema__page--${index + 1}`}
+              data-about-page
+              data-page-number={scene.number}
+              aria-labelledby={`about-page-${scene.number}`}
               key={scene.number}
             >
               <div className="about-cinema__copy">
@@ -73,7 +75,7 @@ export function AboutSection() {
                   <span>{scene.number}</span>
                   <span>PERSONAL NOTE</span>
                 </div>
-                <h3>
+                <h3 id={`about-page-${scene.number}`}>
                   <span>{scene.lead}</span>
                   <em>{scene.accent}</em>
                 </h3>
@@ -83,9 +85,9 @@ export function AboutSection() {
                 </ul>
               </div>
 
-              <div className="about-cinema__visual">
-                <StoryImage {...scene.image} />
-                <span className="about-cinema__image-index" aria-hidden="true">0{index + 1}</span>
+              <div className="about-cinema__page-footer" aria-hidden="true">
+                <span>{index === profileScenes.length - 1 ? 'END OF PROFILE' : 'SCROLL TO TURN'}</span>
+                <span>{scene.number} / 03</span>
               </div>
             </article>
           ))}

@@ -299,8 +299,7 @@ main .hero__handoff .hero__arrow {
   background: rgba(242, 239, 232, 0.15);
 }
 
-.about-cinema__opening,
-.about-cinema__scene {
+.about-cinema__opening {
   position: absolute;
   inset: 0;
 }
@@ -342,7 +341,7 @@ main .hero__handoff .hero__arrow {
 }
 
 .about-cinema__opening h2 em,
-.about-cinema__scene h3 em {
+.about-cinema__page h3 em {
   color: var(--accent-orange);
   font-family: var(--font-editorial);
   font-style: italic;
@@ -359,30 +358,81 @@ main .hero__handoff .hero__arrow {
   font-style: italic;
 }
 
-.about-cinema__scenes {
+.about-cinema__backdrop {
   position: absolute;
+  z-index: -1;
   inset: 0;
-}
-
-.about-cinema__scene {
   display: grid;
-  padding: clamp(6.5rem, 12vh, 9rem) var(--page-padding) clamp(4rem, 8vh, 7rem);
-  grid-template-columns: minmax(18rem, 0.78fr) minmax(30rem, 1.22fr);
-  align-items: center;
-  gap: clamp(3rem, 7vw, 8rem);
+  align-content: center;
+  overflow: hidden;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(242, 239, 232, 0.18);
+  font-size: clamp(9rem, 18vw, 21rem);
+  font-weight: 600;
+  line-height: 0.72;
+  letter-spacing: -0.08em;
+  pointer-events: none;
+  white-space: nowrap;
 }
 
-.about-cinema__scene--reverse {
-  grid-template-columns: minmax(30rem, 1.22fr) minmax(18rem, 0.78fr);
+.about-cinema__backdrop span:last-child {
+  justify-self: end;
 }
 
-.about-cinema__scene--reverse .about-cinema__copy {
-  grid-column: 2;
+.about-cinema__deck {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  perspective: 1400px;
+  perspective-origin: 50% 42%;
+  transform-style: preserve-3d;
 }
 
-.about-cinema__scene--reverse .about-cinema__visual {
-  grid-column: 1;
-  grid-row: 1;
+.about-cinema__page {
+  position: absolute;
+  display: flex;
+  width: min(76vw, 72rem);
+  height: min(70svh, 47rem);
+  min-height: 32rem;
+  padding: clamp(2.5rem, 4.5vw, 5rem);
+  border: 1px solid rgba(242, 239, 232, 0.14);
+  border-radius: clamp(1rem, 2vw, 1.8rem);
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  box-shadow: 0 3rem 8rem rgba(0, 0, 0, 0.48);
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+
+.about-cinema__page::before {
+  position: absolute;
+  top: -22%;
+  right: -7%;
+  color: currentColor;
+  content: attr(data-page-number);
+  font-size: clamp(14rem, 28vw, 30rem);
+  font-weight: 700;
+  line-height: 1;
+  opacity: 0.045;
+  pointer-events: none;
+}
+
+.about-cinema__page--1 {
+  background: #e8e2d7;
+  color: #111210;
+}
+
+.about-cinema__page--2 {
+  background: var(--accent-orange);
+  color: #0b0c0b;
+}
+
+.about-cinema__page--3 {
+  background: #181919;
+  color: var(--text);
 }
 
 .about-cinema__copy {
@@ -394,27 +444,30 @@ main .hero__handoff .hero__arrow {
   display: flex;
   margin-bottom: 6vh;
   justify-content: space-between;
-  color: #7e7f7b;
+  color: currentColor;
   font-size: 0.58rem;
   letter-spacing: 0.18em;
+  opacity: 0.52;
 }
 
 .about-cinema__scene-meta span:first-child {
   color: var(--accent-orange);
 }
 
-.about-cinema__scene h3 {
+.about-cinema__page h3 {
   display: grid;
   margin-bottom: 4vh;
-  font-size: clamp(4.5rem, 8vw, 8rem);
+  font-size: clamp(4.5rem, 7.6vw, 8.4rem);
   line-height: 0.84;
+  letter-spacing: -0.075em;
 }
 
 .about-cinema__copy > p {
   max-width: 34rem;
-  color: #babbb6;
-  font-size: clamp(0.95rem, 1.15vw, 1.1rem);
+  color: currentColor;
+  font-size: clamp(1rem, 1.2vw, 1.16rem);
   line-height: 1.85;
+  opacity: 0.72;
 }
 
 .about-cinema__copy ul {
@@ -422,34 +475,26 @@ main .hero__handoff .hero__arrow {
   margin-top: 2.3rem;
   flex-wrap: wrap;
   gap: 0.45rem 1.25rem;
-  color: #6f706d;
+  color: currentColor;
   font-size: 0.58rem;
   letter-spacing: 0.12em;
   list-style: none;
   text-transform: uppercase;
+  opacity: 0.52;
 }
 
-.about-cinema__visual {
-  position: relative;
-  height: min(66vh, 46rem);
-  overflow: hidden;
-  box-shadow: 0 3rem 9rem rgba(0, 0, 0, 0.62);
-  will-change: transform, clip-path;
+.about-cinema__page--2 h3 em {
+  color: var(--text);
 }
 
-.about-cinema__visual .story-image {
-  width: 100%;
-  height: 100%;
-}
-
-.about-cinema__image-index {
-  position: absolute;
-  right: 1rem;
-  bottom: 0.75rem;
-  color: rgba(242, 239, 232, 0.76);
-  font-size: clamp(2rem, 4vw, 4rem);
-  font-weight: 600;
-  letter-spacing: -0.07em;
+.about-cinema__page-footer {
+  display: flex;
+  padding-top: 1rem;
+  border-top: 1px solid currentColor;
+  justify-content: space-between;
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+  opacity: 0.48;
 }
 
 .about-cinema__progress {
@@ -467,6 +512,141 @@ main .hero__handoff .hero__arrow {
   width: clamp(2.5rem, 5vw, 5rem);
   height: 1px;
   background: var(--text);
+}
+
+/* Bridge from the personal profile into the shared journey. */
+/* Personal photo study: closed circle -> enlarged lower arc. */
+.orbit-bridge {
+  position: relative;
+  height: 320svh;
+  background: #080909;
+  color: var(--text);
+}
+
+.orbit-bridge__sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.orbit-bridge__intro {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.orbit-bridge__intro p {
+  font-size: clamp(1.8rem, 3.3vw, 3.8rem);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+}
+
+.orbit-bridge__intro small {
+  margin-top: 0.75rem;
+  color: #92928c;
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+}
+
+.orbit-bridge__copy {
+  position: absolute;
+  z-index: 2;
+  top: 10%;
+  left: 0;
+  width: 100%;
+  padding-inline: var(--page-padding);
+  text-align: center;
+}
+
+.orbit-bridge__copy > p {
+  margin-bottom: 1rem;
+  color: var(--accent-orange);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+}
+
+.orbit-bridge__copy h2 {
+  font-size: clamp(2.7rem, 4.8vw, 5rem);
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+}
+
+.orbit-bridge__copy small {
+  display: block;
+  margin-top: 1.25rem;
+  color: #999993;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+}
+
+.orbit-bridge__ring {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  pointer-events: none;
+}
+
+.orbit-bridge__card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: clamp(5.75rem, 8.5vw, 8.5rem);
+  margin: 0;
+  aspect-ratio: 0.71;
+  overflow: hidden;
+  border: 1px solid #3e3e3a;
+  border-radius: 0.9rem;
+  background: #20211f;
+  box-shadow: 0 12px 24px rgb(0 0 0 / 22%);
+}
+
+.orbit-bridge__card:nth-child(3n + 2) {
+  background: #292824;
+}
+
+.orbit-bridge__card:nth-child(3n) {
+  background: #202727;
+}
+
+.orbit-bridge__card > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.orbit-bridge__placeholder {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  color: #b7b6ae;
+}
+
+.orbit-bridge__placeholder span {
+  font-size: 0.45rem;
+  letter-spacing: 0.2em;
+}
+
+.orbit-bridge__placeholder strong {
+  font-size: 1.45rem;
+  font-weight: 400;
+}
+
+.orbit-bridge__placeholder i {
+  width: 1rem;
+  height: 1px;
+  margin-top: 0.3rem;
+  background: var(--accent-orange);
 }
 
 /* My journey: a sparse stream of images approaching the camera. */
@@ -1111,13 +1291,8 @@ main .hero__handoff .hero__arrow {
 }
 
 @media (max-width: 1100px) {
-  .about-cinema__scene {
-    grid-template-columns: minmax(17rem, 0.9fr) minmax(25rem, 1.1fr);
-    gap: 4vw;
-  }
-
-  .about-cinema__scene--reverse {
-    grid-template-columns: minmax(25rem, 1.1fr) minmax(17rem, 0.9fr);
+  .about-cinema__page {
+    width: min(84vw, 66rem);
   }
 
   .journey-universe__card--1 { left: 7%; }
@@ -1177,8 +1352,7 @@ main .hero__handoff .hero__arrow {
     padding-top: 1.5rem;
   }
 
-  .about-cinema__opening,
-  .about-cinema__scene {
+  .about-cinema__opening {
     position: relative;
     inset: auto;
   }
@@ -1209,35 +1383,35 @@ main .hero__handoff .hero__arrow {
     align-self: flex-start;
   }
 
-  .about-cinema__scenes {
+  .about-cinema__backdrop {
+    display: none;
+  }
+
+  .about-cinema__deck {
     position: relative;
     inset: auto;
+    display: grid;
+    gap: 2rem;
+    padding: 0 var(--page-padding) 7rem;
+    perspective: none;
   }
 
-  .about-cinema__scene,
-  .about-cinema__scene--reverse {
+  .about-cinema__page {
+    position: relative;
     display: flex;
-    min-height: auto;
-    padding: 7rem var(--page-padding);
-    flex-direction: column;
-    gap: 3rem;
-    border-top: 1px solid var(--line);
-  }
-
-  .about-cinema__scene--reverse .about-cinema__copy,
-  .about-cinema__scene--reverse .about-cinema__visual {
-    grid-column: auto;
-    grid-row: auto;
-  }
-
-  .about-cinema__visual {
     width: 100%;
-    height: min(62vh, 34rem);
-    order: 2;
+    height: auto;
+    min-height: min(36rem, 78svh);
+    padding: clamp(2rem, 7vw, 3rem);
+    flex-direction: column;
+    gap: 4rem;
+    transform: none !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 
-  .about-cinema__scene h3 {
-    font-size: clamp(4rem, 17vw, 7rem);
+  .about-cinema__page h3 {
+    font-size: clamp(3.6rem, 16vw, 6.5rem);
   }
 
   .about-cinema__progress {
@@ -1391,7 +1565,7 @@ main .hero__handoff .hero__arrow {
   }
 
   .about-cinema__opening,
-  .about-cinema__scene {
+  .about-cinema__page {
     position: relative;
     inset: auto;
     visibility: visible !important;
@@ -1403,12 +1577,22 @@ main .hero__handoff .hero__arrow {
     min-height: 100svh;
   }
 
-  .about-cinema__scenes {
+  .about-cinema__deck {
     position: relative;
+    display: grid;
+    gap: 2rem;
+    padding: 0 var(--page-padding) 7rem;
+    perspective: none;
   }
 
-  .about-cinema__scene {
-    min-height: 100svh;
+  .about-cinema__page {
+    width: 100%;
+    min-height: min(36rem, 78svh);
+    padding: clamp(2rem, 7vw, 3rem);
+  }
+
+  .about-cinema__backdrop {
+    display: none;
   }
 
   .journey-universe__sticky {
@@ -1424,6 +1608,54 @@ main .hero__handoff .hero__arrow {
 }
 
 @media (max-width: 820px), (prefers-reduced-motion: reduce) {
+  .orbit-bridge {
+    height: auto;
+  }
+
+  .orbit-bridge__sticky {
+    position: relative;
+    height: auto;
+    padding: 4rem var(--page-padding) 7rem;
+  }
+
+  .orbit-bridge__intro {
+    display: none;
+  }
+
+  .orbit-bridge__copy {
+    position: relative;
+    inset: auto;
+    padding: 0 0 3rem;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .orbit-bridge__ring {
+    position: relative;
+    inset: auto;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem 1rem;
+  }
+
+  .orbit-bridge__card {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .orbit-bridge__card[data-orbit-duplicate] {
+    display: none;
+  }
+
+  .orbit-bridge__card:nth-child(even) {
+    margin-top: 1.5rem;
+  }
+
   .future__plans {
     height: auto;
   }

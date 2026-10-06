@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from 'react'
 import { MOTION_MEDIA } from './config'
-import { gsap, ScrollTrigger } from './gsap'
+import { gsap, requestScrollRefresh } from './gsap'
 import type { AnimationConditions, SectionAnimation } from './types'
 
 export function useSectionTimeline<T extends HTMLElement>(createAnimation: SectionAnimation) {
@@ -11,6 +11,7 @@ export function useSectionTimeline<T extends HTMLElement>(createAnimation: Secti
     if (!scope) return
 
     const media = gsap.matchMedia()
+    let active = true
 
     media.add(MOTION_MEDIA, (context) => {
       const conditions = context.conditions as AnimationConditions
@@ -24,10 +25,43 @@ export function useSectionTimeline<T extends HTMLElement>(createAnimation: Secti
       return () => gsapContext.revert()
     })
 
-    const refreshFrame = window.requestAnimationFrame(() => ScrollTrigger.refresh())
+    // ScrollTrigger must measure after fonts, lazy images, responsive layout and
+    // bfcache/tab restores have settled. A single mount-time RAF is too early
+    // for those asynchronous layout changes and can leave a scrubbed scene in
+    // its hidden initial state until the next resize.
+    const refresh = () => {
+      if (active) requestScrollRefresh()
+    }
+
+    const resizeObserver = new ResizeObserver(refresh)
+    resizeObserver.observe(scope)
+
+    const pendingImages = Array.from(scope.querySelectorAll('img')).filter(
+      (image) => !image.complete,
+    )
+    pendingImages.forEach((image) => {
+      image.addEventListener('load', refresh, { once: true })
+      image.addEventListener('error', refresh, { once: true })
+    })
+
+    const refreshWhenVisible = () => {
+      if (document.visibilityState === 'visible') refresh()
+    }
+
+    window.addEventListener('pageshow', refresh)
+    document.addEventListener('visibilitychange', refreshWhenVisible)
+    document.fonts?.ready.then(refresh).catch(() => undefined)
+    refresh()
 
     return () => {
-      window.cancelAnimationFrame(refreshFrame)
+      active = false
+      resizeObserver.disconnect()
+      pendingImages.forEach((image) => {
+        image.removeEventListener('load', refresh)
+        image.removeEventListener('error', refresh)
+      })
+      window.removeEventListener('pageshow', refresh)
+      document.removeEventListener('visibilitychange', refreshWhenVisible)
       media.revert()
     }
   }, [createAnimation])

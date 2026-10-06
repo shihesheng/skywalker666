@@ -3,6 +3,7 @@ import { AboutSection } from './components/AboutSection'
 import { ExperienceJourneySection } from './components/ExperienceJourneySection'
 import { FutureSection } from './components/FutureSection'
 import { HeroSection } from './components/HeroSection'
+import { JourneyOrbitTransition } from './components/JourneyOrbitTransition'
 import { JourneySection } from './components/JourneySection'
 import { MeaningSection } from './components/MeaningSection'
 import { OutroSection } from './components/OutroSection'
@@ -15,6 +16,7 @@ function App() {
     <main>
       <HeroSection />
       <AboutSection />
+      <JourneyOrbitTransition />
       <JourneySection />
       <ExperienceJourneySection />
       <MeaningSection />
