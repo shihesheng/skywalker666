@@ -33,7 +33,7 @@ export type PlanChapter = {
 }
 
 export const siteMeta = {
-  name: '[NAME]',
+  name: 'Eddy 盛世禾',
   role: 'External Relations',
   englishRole: 'External Relations · Deputy Head Candidate',
 }
