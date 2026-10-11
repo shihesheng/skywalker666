@@ -1,9 +1,25 @@
-// Add personal photo URLs here; these slots are independent of the Journey collection.
-export const personalPhotos: { id: string; src: string; alt: string }[] = Array.from(
-  { length: 12 },
-  (_, index) => ({
-    id: `personal-${String(index + 1).padStart(2, '0')}`,
-    src: '',
-    alt: `个人剪影 ${String(index + 1).padStart(2, '0')}`,
-  }),
-)
+export type PortfolioItem = {
+  id: string
+  src: string
+  alt: string
+}
+
+const portfolioItems: PortfolioItem[] = [
+  { id: 'portfolio-01', src: '/images/portfolio-01.png', alt: '软件试运行总结报告' },
+  { id: 'portfolio-02', src: '/images/portfolio-02.png', alt: '赞助合作计划协议' },
+  { id: 'portfolio-03', src: '/images/portfolio-03.png', alt: '电子病历系统应用水平评价标准' },
+  { id: 'portfolio-04', src: '/images/portfolio-04.png', alt: '人工智能课程教学大纲' },
+  { id: 'portfolio-05', src: '/images/portfolio-05.png', alt: '电竞鼠标竞品分析 Agent 项目文档' },
+  { id: 'portfolio-06', src: '/images/portfolio-06.jpg', alt: '多 Agent 协作工作流' },
+  { id: 'portfolio-07', src: '/images/portfolio-07.jpg', alt: '字节跳动 AI 挑战赛项目' },
+  { id: 'portfolio-08', src: '/images/portfolio-08.jpg', alt: 'Anker Hackathon 项目报告' },
+  { id: 'portfolio-09', src: '/images/portfolio-09.jpg', alt: '外联项目协作记录' },
+]
+
+const emptySlots: PortfolioItem[] = Array.from({ length: 3 }, (_, index) => ({
+  id: `portfolio-empty-${String(index + 10).padStart(2, '0')}`,
+  src: '',
+  alt: `Portfolio 预留位置 ${index + 10}`,
+}))
+
+export const personalPhotos: PortfolioItem[] = [...portfolioItems, ...emptySlots]

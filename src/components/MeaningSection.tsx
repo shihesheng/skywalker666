@@ -2,6 +2,29 @@ import { createMeaningTimeline } from '../animation/sections/meaning.timeline'
 import { useSectionTimeline } from '../animation/useSectionTimeline'
 import { meaningChapters, meaningIntro, type MeaningChapter } from '../data/siteContent'
 
+const sculpturePaths: Record<string, { primary: string; secondary: string; label: string }> = {
+  '01': {
+    primary: 'M14 62 C30 24 61 76 86 40',
+    secondary: 'M18 68 C37 40 58 63 82 34',
+    label: 'SEND / RECEIVE',
+  },
+  '02': {
+    primary: 'M14 25 C36 10 48 67 78 48 C91 40 82 78 43 84',
+    secondary: 'M18 31 C41 18 49 73 82 54',
+    label: 'THREE POINT NETWORK',
+  },
+  '03': {
+    primary: 'M18 86 C35 70 52 49 79 17',
+    secondary: 'M25 92 C42 74 58 53 85 23',
+    label: 'IDEA / ACTION / LAND',
+  },
+  '04': {
+    primary: 'M18 61 C28 17 74 10 86 48 C96 79 55 94 25 74',
+    secondary: 'M22 66 C35 28 69 20 81 50 C89 72 57 85 31 72',
+    label: 'ONE SHARED SYSTEM',
+  },
+}
+
 function MeaningContent({ chapter, fallback = false }: { chapter: MeaningChapter; fallback?: boolean }) {
   return (
     <article
@@ -17,6 +40,7 @@ function MeaningContent({ chapter, fallback = false }: { chapter: MeaningChapter
         {chapter.body.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
       </div>
       <blockquote>{chapter.statement}</blockquote>
+      {fallback && <MeaningVisual chapter={chapter} fallback />}
       {chapter.id === '03' && (
         <div className="meaning__process" aria-hidden="true">
           <span>确认信息</span><i /><span>沟通时间</span><i /><span>协调现场</span><i /><span>处理变化</span>
@@ -26,16 +50,44 @@ function MeaningContent({ chapter, fallback = false }: { chapter: MeaningChapter
   )
 }
 
-function MeaningVisual({ chapter }: { chapter: MeaningChapter }) {
+function MeaningVisual({ chapter, fallback = false }: { chapter: MeaningChapter; fallback?: boolean }) {
+  const path = sculpturePaths[chapter.id]
+
   return (
-    <div className={`meaning__visual-layer meaning__visual-layer--${chapter.id}`} data-motion aria-hidden="true">
+    <div
+      className={`meaning__visual-layer meaning__visual-layer--${chapter.id}${fallback ? ' meaning__visual-layer--fallback' : ''}`}
+      data-motion={!fallback ? true : undefined}
+      aria-hidden="true"
+    >
       <span className="meaning__visual-word">{chapter.englishTitle}</span>
-      <span className="meaning__visual-node meaning__visual-node--a">01</span>
-      <span className="meaning__visual-node meaning__visual-node--b">02</span>
-      <span className="meaning__visual-node meaning__visual-node--c">03</span>
-      <i className="meaning__visual-link meaning__visual-link--a" />
-      <i className="meaning__visual-link meaning__visual-link--b" />
-      <i className="meaning__visual-ring" />
+      <div className="meaning__sculpture">
+        <span className="meaning__visual-field" />
+        <span className="meaning__visual-plane meaning__visual-plane--far" />
+        <svg className="meaning__visual-geometry meaning__visual-geometry--back" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path className="meaning__visual-path meaning__visual-path--shadow" d={path.secondary} pathLength="100" />
+          <path className="meaning__visual-path meaning__visual-path--glow" d={path.primary} pathLength="100" />
+          <path className="meaning__visual-path meaning__visual-path--core" d={path.primary} pathLength="100" />
+        </svg>
+        <i className="meaning__visual-orbit meaning__visual-orbit--back" />
+
+        <span className="meaning__visual-node meaning__visual-node--a"><i className="meaning__node-radar" /><b>01</b><small>NODE</small></span>
+        <span className="meaning__visual-node meaning__visual-node--b"><i className="meaning__node-radar" /><b>02</b><small>NODE</small></span>
+        <span className="meaning__visual-node meaning__visual-node--c"><i className="meaning__node-radar" /><b>03</b><small>NODE</small></span>
+
+        <svg className="meaning__visual-geometry meaning__visual-geometry--front" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path className="meaning__visual-path meaning__visual-path--signal" d={path.primary} pathLength="100" />
+          <circle className="meaning__visual-packet meaning__visual-packet--one" r="0.72">
+            <animateMotion dur="6.4s" repeatCount="indefinite" path={path.primary} />
+          </circle>
+          <circle className="meaning__visual-packet meaning__visual-packet--two" r="0.42">
+            <animateMotion begin="-3.2s" dur="6.4s" repeatCount="indefinite" path={path.primary} />
+          </circle>
+        </svg>
+        <i className="meaning__visual-orbit meaning__visual-orbit--front" />
+        <span className="meaning__visual-pulse" />
+        <span className="meaning__visual-telemetry"><i>SYS.{chapter.id}</i><i>SIGNAL / ACTIVE</i></span>
+        <span className="meaning__visual-caption">{path.label}</span>
+      </div>
     </div>
   )
 }

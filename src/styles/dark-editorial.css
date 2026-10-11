@@ -619,6 +619,8 @@ main .hero__handoff .hero__arrow {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
+  transform: scale(1.025);
 }
 
 .orbit-bridge__placeholder {
@@ -982,13 +984,19 @@ main .hero__handoff .hero__arrow {
 
 .meaning__visual-node {
   border-color: rgba(242, 239, 232, 0.22);
-  background: #101111;
+  background:
+    radial-gradient(circle at 35% 28%, rgba(242, 239, 232, 0.1), transparent 22%),
+    linear-gradient(145deg, rgba(35, 37, 36, 0.96), rgba(10, 11, 11, 0.9));
   color: var(--text);
 }
 
-.meaning__visual-link,
-.meaning__visual-ring {
-  border-color: rgba(255, 90, 31, 0.55);
+.meaning__visual-path--core,
+.meaning__visual-path--signal {
+  stroke: var(--accent-orange);
+}
+
+.meaning__visual-orbit--front {
+  border-color: rgba(255, 90, 31, 0.62);
 }
 
 .meaning__chapter-heading span,
@@ -1502,6 +1510,42 @@ main .hero__handoff .hero__arrow {
     display: none;
   }
 
+  .meaning__visual-layer--fallback {
+    position: relative;
+    inset: auto;
+    display: block;
+    width: 100%;
+    height: min(84vw, 27rem);
+    margin: 3.5rem 0 1rem;
+    visibility: visible;
+    opacity: 1;
+    perspective: 900px;
+    --meaning-pfx: 0px;
+    --meaning-pfy: 0px;
+    --meaning-pmx: 0px;
+    --meaning-pmy: 0px;
+    --meaning-pbx: 0px;
+    --meaning-pby: 0px;
+  }
+
+  .meaning__visual-layer--fallback .meaning__visual-word {
+    right: 0;
+    bottom: 1rem;
+    left: auto;
+    font-size: clamp(3rem, 14vw, 5.5rem);
+    opacity: 0.55;
+    writing-mode: horizontal-tb;
+  }
+
+  .meaning__visual-layer--fallback .meaning__sculpture {
+    inset: 2% 1% 5%;
+  }
+
+  .meaning__visual-layer--fallback .meaning__visual-node {
+    width: clamp(4.2rem, 19vw, 6rem);
+    pointer-events: none;
+  }
+
   .meaning__intro h2,
   .future__intro h2 {
     font-size: clamp(4.6rem, 19vw, 8rem);
@@ -1608,6 +1652,37 @@ main .hero__handoff .hero__arrow {
 }
 
 @media (max-width: 820px), (prefers-reduced-motion: reduce) {
+  .meaning__visual-layer--fallback {
+    position: relative;
+    inset: auto;
+    display: block;
+    width: min(100%, 31rem);
+    height: min(84vw, 27rem);
+    margin: 3.5rem 0 1rem;
+    visibility: visible;
+    opacity: 1;
+    perspective: 900px;
+    --meaning-pfx: 0px;
+    --meaning-pfy: 0px;
+    --meaning-pmx: 0px;
+    --meaning-pmy: 0px;
+    --meaning-pbx: 0px;
+    --meaning-pby: 0px;
+  }
+
+  .meaning__visual-layer--fallback .meaning__visual-word {
+    right: 0;
+    bottom: 1rem;
+    left: auto;
+    font-size: clamp(3rem, 14vw, 5.5rem);
+    opacity: 0.55;
+    writing-mode: horizontal-tb;
+  }
+
+  .meaning__visual-layer--fallback .meaning__sculpture {
+    inset: 2% 1% 5%;
+  }
+
   .orbit-bridge {
     height: auto;
   }

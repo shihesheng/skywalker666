@@ -9,13 +9,13 @@ export function JourneyOrbitTransition() {
     <section ref={sectionRef} className="orbit-bridge" aria-labelledby="orbit-bridge-title" data-fd-id="section-orbit-bridge">
       <div className="orbit-bridge__sticky">
         <div className="orbit-bridge__intro" data-orbit-intro aria-hidden="true">
-          <p>生活中的我。</p>
+          <p>MY PORTFOLIO.</p>
           <small>SCROLL TO EXPLORE</small>
         </div>
         <header className="orbit-bridge__copy" data-orbit-copy>
-          <p>PERSONAL PHOTO NOTES</p>
-          <h2 id="orbit-bridge-title">个人剪影</h2>
-          <small>A LITTLE MORE ABOUT ME</small>
+          <p>SELECTED WORK &amp; EVIDENCE</p>
+          <h2 id="orbit-bridge-title">PORTFOLIO</h2>
+          <small>CONTRACTS · PROJECTS · RESEARCH</small>
         </header>
         <div className="orbit-bridge__ring" data-orbit-ring>
           {personalPhotos.map((photo, index) => (
@@ -27,8 +27,8 @@ export function JourneyOrbitTransition() {
               {photo.src ? (
                 <img src={photo.src} alt={photo.alt} loading="lazy" decoding="async" />
               ) : (
-                <div className="orbit-bridge__placeholder" role="img" aria-label={`个人照片预留位置 ${index % personalPhotos.length + 1}`}>
-                  <span>PHOTO</span>
+                <div className="orbit-bridge__placeholder" role="img" aria-label={`Portfolio 预留位置 ${index % personalPhotos.length + 1}`}>
+                  <span>WORK</span>
                   <strong>{String(index % personalPhotos.length + 1).padStart(2, '0')}</strong>
                   <i aria-hidden="true" />
                 </div>

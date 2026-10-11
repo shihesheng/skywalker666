@@ -6,25 +6,29 @@ const profileScenes: Array<{
   number: string
   lead: string
   accent: string
+  body: string
   labels: string[]
 }> = [
   {
     number: '01',
     lead: '边做',
     accent: '边学.',
+    body: aboutContent.body[0],
     labels: aboutContent.labels.slice(0, 3),
   },
   {
     number: '02',
-    lead: '把想法',
-    accent: '做出来.',
-    labels: aboutContent.labels.slice(2, 4),
+    lead: '走出',
+    accent: '舒适区.',
+    body: aboutContent.body[2],
+    labels: aboutContent.labels.slice(4),
   },
   {
     number: '03',
-    lead: '走出',
-    accent: '舒适区.',
-    labels: aboutContent.labels.slice(4),
+    lead: '把想法',
+    accent: '做出来.',
+    body: aboutContent.body[1],
+    labels: aboutContent.labels.slice(2, 4),
   },
 ]
 
@@ -79,7 +83,7 @@ export function AboutSection() {
                   <span>{scene.lead}</span>
                   <em>{scene.accent}</em>
                 </h3>
-                <p>{aboutContent.body[index]}</p>
+                <p>{scene.body}</p>
                 <ul aria-label="个人关键词">
                   {scene.labels.map((label) => <li key={label}>{label}</li>)}
                 </ul>

@@ -4,7 +4,11 @@ import type { SectionAnimation } from '../types'
 import { performanceCallbacks, selectAll } from '../utils'
 
 const TAU = Math.PI * 2
-const CIRCULATION_SPEED = 0.065
+const CIRCULATION_SPEED = 0.052
+const ARC_APEX_RATIO = 0.7
+const ARC_CARD_WIDTH_RATIO = 0.16
+const ARC_CARD_HEIGHT_RATIO = 0.382
+const ARC_CARD_MAX_WIDTH = 240
 const mix = (a: number, b: number, t: number) => a + (b - a) * t
 const wrap = (value: number, span: number) => ((value + span / 2) % span + span) % span - span / 2
 const smooth = (value: number) => {
@@ -72,10 +76,14 @@ export const createJourneyOrbitTimeline: SectionAnimation = (scope, conditions) 
     // Twelve unique photos; both ends of the circulating ribbon are offscreen.
     arcSpan = 1.8
     // Cap vertical whitespace in tall desktop windows.
-    arcApex = Math.min(height * 0.76, width * 0.47)
+    arcApex = Math.min(height * ARC_APEX_RATIO, width * 0.47)
     const cardWidth = cards[0].offsetWidth
     scaleStart = radius * 0.38 / cardWidth
-    scaleEnd = Math.min(width * 0.112, height * 0.27 * 0.71, 166) / cardWidth
+    scaleEnd = Math.min(
+      width * ARC_CARD_WIDTH_RATIO,
+      height * ARC_CARD_HEIGHT_RATIO * 0.71,
+      ARC_CARD_MAX_WIDTH,
+    ) / cardWidth
     render()
   }
   measure()
