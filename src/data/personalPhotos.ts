@@ -14,12 +14,9 @@ const portfolioItems: PortfolioItem[] = [
   { id: 'portfolio-07', src: '/images/portfolio-07.jpg', alt: '字节跳动 AI 挑战赛项目' },
   { id: 'portfolio-08', src: '/images/portfolio-08.jpg', alt: 'Anker Hackathon 项目报告' },
   { id: 'portfolio-09', src: '/images/portfolio-09.jpg', alt: '外联项目协作记录' },
+  { id: 'portfolio-10', src: '/images/portfolio-10.jpg', alt: '字节跳动 AI 全栈挑战赛优秀项目证书' },
+  { id: 'portfolio-11', src: '/images/portfolio-11.png', alt: 'UNSW 中国学联推文赞助合作协议' },
+  { id: 'portfolio-12', src: '/images/portfolio-12.jpg', alt: 'Aeonguard AI 推理引擎项目' },
 ]
 
-const emptySlots: PortfolioItem[] = Array.from({ length: 3 }, (_, index) => ({
-  id: `portfolio-empty-${String(index + 10).padStart(2, '0')}`,
-  src: '',
-  alt: `Portfolio 预留位置 ${index + 10}`,
-}))
-
-export const personalPhotos: PortfolioItem[] = [...portfolioItems, ...emptySlots]
+export const personalPhotos: PortfolioItem[] = portfolioItems
