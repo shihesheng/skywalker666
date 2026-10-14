@@ -101,12 +101,12 @@ export const experiences: Experience[] = [
   {
     id: '03',
     title: '期末加油包',
-    englishTitle: 'A small thing, at the right time.',
+    englishTitle: 'Prepared before the day begins.',
     body: [
-      '外联并不一定只存在于大型活动里。有时候，一个很小的活动，也能让社团和同学之间产生真正的连接。',
-      '这也让我开始意识到，活动的价值不一定取决于规模，而在于它有没有回应大家当下真正需要的东西。',
+      '期末加油包是一场面向大量同学的校园活动。现场能够顺利运转，离不开活动开始前对物资、场地、人员和流程的整体统筹。',
+      '从预估参与人数、清点和分装物资，到安排人员分工、领取动线与现场节奏，每个环节都需要提前确认并彼此衔接。这次经历让我认识到，大型活动的顺利呈现，往往从前期细致而有条理的准备开始。',
     ],
-    keywords: ['warm', 'small details', 'human connection'],
+    keywords: ['planning', 'logistics', 'coordination'],
     images: [
       { src: '/images/finals-kit-01.jpg', alt: '期末加油包活动照片一', label: 'FINALS KIT / 01' },
       { src: '/images/finals-kit-02.jpg', alt: '期末加油包活动照片二', label: 'FINALS KIT / 02' },

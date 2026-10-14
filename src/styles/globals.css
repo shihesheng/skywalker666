@@ -849,6 +849,21 @@
     grid-column: 2 / 5;
   }
 
+  .experience-scene--climax .experience-scene__copy h3 {
+    max-width: none;
+    font-size: clamp(4rem, 5vw, 6rem);
+    overflow-wrap: normal;
+    word-break: keep-all;
+  }
+
+  @media (min-width: 821px) {
+    .experience-scene--climax .experience-scene__copy {
+      --welcome-copy-offset: clamp(1.5rem, 2.4vw, 2.75rem);
+      left: calc(-1 * var(--welcome-copy-offset));
+      width: calc(100% + var(--welcome-copy-offset));
+    }
+  }
+
   .experience-scene--climax .experience-scene__media {
     height: min(72vh, 44rem);
     grid-column: 5 / 13;
